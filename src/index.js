@@ -19,7 +19,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use('/', async (req, res) => {
-  console.log(`Incoming request: Method=${req.method}, URL=${req.url}, Body=${JSON.stringify(req.body)}`);
+  console.log(`Incoming request: Method=${req.method}, URL=${req.url}, Header=${req.headers}, Body=${JSON.stringify(req.body)}`);
 
   try {
     const response = await axios({
