@@ -10,6 +10,7 @@ const app = express();
 
 const PORT = process.env.PORT || 3000;
 const TARGET_URL = process.env.TARGET_URL;
+const ARCHIVE_URL = process.env.ARCHIVE_URL;
 
 const httpsAgent = new https.Agent({
   rejectUnauthorized: false
@@ -22,7 +23,7 @@ app.use('/', async (req, res) => {
   console.log(`Incoming request: Method=${req.method}, URL=${req.url}, Header=${JSON.stringify(req.headers)}, Body=${JSON.stringify(req.body)}`);
 
   try {
-    const response = await axios({
+    let response = await axios({
       method: req.method,
       url: TARGET_URL,
       headers: {
@@ -33,8 +34,21 @@ app.use('/', async (req, res) => {
       validateStatus: () => true
     });
 
-    console.log(`Response received: Status=${response.status}, Body=${JSON.stringify(response.data)}`);
 
+    if (response.data.error != null) {
+      console.log(`Error received: ${JSON.stringify(response.data.error)}`)
+      response = await axios({
+        method: req.method,
+        url: ARCHIVE_URL,
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        data: req.body,
+        httpsAgent: httpsAgent,
+        validateStatus: () => true
+      });
+    }
+    console.log(`Response received: Status=${response.status}, Body=${JSON.stringify(response.data)}`);
     res.status(response.status).set(response.headers).send(response.data);
   } catch (err) {
     console.error(`Proxy error: ${err.message}`);
