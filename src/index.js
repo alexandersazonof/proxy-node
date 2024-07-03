@@ -35,8 +35,10 @@ app.use('/', async (req, res) => {
     });
 
 
-    if (response.data.error != null) {
-      console.log(`Error received: ${JSON.stringify(response.data.error)}`)
+    if (response.data.error != null || response.result == null) {
+      if (response.data.error != null) {
+        console.log(`Error received: ${JSON.stringify(response.data.error)}`)
+      }
       response = await axios({
         method: req.method,
         url: ARCHIVE_URL,
