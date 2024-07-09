@@ -61,3 +61,8 @@ app.use('/', async (req, res) => {
 app.listen(PORT, () => {
   console.log(`Proxy server running on port ${PORT}`);
 });
+
+setInterval(() => {
+  const used = process.memoryUsage();
+  console.log(`Memory Usage: RSS=${(used.rss / 1024 / 1024).toFixed(2)} MB, Heap Total=${(used.heapTotal / 1024 / 1024).toFixed(2)} MB, Heap Used=${(used.heapUsed / 1024 / 1024).toFixed(2)} MB, External=${(used.external / 1024 / 1024).toFixed(2)} MB`);
+}, 10000);
