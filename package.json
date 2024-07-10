@@ -4,7 +4,10 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "start": "node src/index.js --max-old-space-size=4096"
+    "start": "node src/index.js",
+    "start-prod": "pm2 start src/index.js -i 3 --name 'proxy'",
+    "list": "pm2 list",
+    "logs": "pm2 logs proxy"
   },
   "dependencies": {
     "axios": "^1.7.2",
@@ -12,6 +15,7 @@
     "dotenv": "^16.4.5",
     "express": "^4.19.2",
     "http-proxy": "^1.18.1",
-    "http-proxy-middleware": "^3.0.0"
+    "http-proxy-middleware": "^3.0.0",
+    "pm2": "^5.4.2"
   }
 }
